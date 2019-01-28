@@ -9,8 +9,8 @@ from utils import ImagePool
 FLAGS = tf.flags.FLAGS
 
 tf.flags.DEFINE_integer('batch_size', 1, 'batch size, default: 1')
-tf.flags.DEFINE_integer('image_width', 256, 'image width, default: 256')
 tf.flags.DEFINE_integer('image_height', 256, 'image height, default: 256')
+tf.flags.DEFINE_integer('image_width', 256, 'image width, default: 256')
 tf.flags.DEFINE_bool('use_lsgan', True,
                      'use lsgan (mean squared error) or cross entropy loss, default: True')
 tf.flags.DEFINE_string('norm', 'instance',
@@ -53,7 +53,7 @@ def train():
         X_train_file=FLAGS.X,
         Y_train_file=FLAGS.Y,
         batch_size=FLAGS.batch_size,
-        image_size=(FLAGS.image_width, FLAGS.image_height),
+        image_size=(FLAGS.image_height, FLAGS.image_width),
         use_lsgan=FLAGS.use_lsgan,
         norm=FLAGS.norm,
         lambda1=FLAGS.lambda1,
@@ -114,6 +114,10 @@ def train():
           save_path = saver.save(sess, checkpoints_dir + "/model.ckpt", global_step=step)
           logging.info("Model saved in file: %s" % save_path)
 
+        if step % 100000 == 0:
+          logging.info("Training finished: 100k iterations achieved.")
+          coord.request_stop()
+          
         step += 1
 
     except KeyboardInterrupt:
