@@ -12,7 +12,7 @@ class CycleGAN:
                X_train_file='',
                Y_train_file='',
                batch_size=1,
-               image_size=256,
+               image_size=(256,256),
                use_lsgan=True,
                norm='instance',
                lambda1=10,
@@ -26,7 +26,7 @@ class CycleGAN:
       X_train_file: string, X tfrecords file for training
       Y_train_file: string Y tfrecords file for training
       batch_size: integer, batch size
-      image_size: integer, image size
+      image_size: tuple of integers, (image width, image heigth)
       lambda1: integer, weight for forward cycle loss (X->Y->X)
       lambda2: integer, weight for backward cycle loss (Y->X->Y)
       use_lsgan: boolean
@@ -56,9 +56,9 @@ class CycleGAN:
         self.is_training, norm=norm, use_sigmoid=use_sigmoid)
 
     self.fake_x = tf.placeholder(tf.float32,
-        shape=[batch_size, image_size, image_size, 3])
+        shape=[batch_size, image_size[0], image_size[1], 3])
     self.fake_y = tf.placeholder(tf.float32,
-        shape=[batch_size, image_size, image_size, 3])
+        shape=[batch_size, image_size[0], image_size[1], 3])
 
   def model(self):
     X_reader = Reader(self.X_train_file, name='X',

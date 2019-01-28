@@ -2,7 +2,7 @@ import tensorflow as tf
 import utils
 
 class Reader():
-  def __init__(self, tfrecords_file, image_size=256,
+  def __init__(self, tfrecords_file, image_size=(256,256),
     min_queue_examples=1000, batch_size=1, num_threads=8, name=''):
     """
     Args:
@@ -49,9 +49,9 @@ class Reader():
     return images
 
   def _preprocess(self, image):
-    image = tf.image.resize_images(image, size=(self.image_size, self.image_size))
+    image = tf.image.resize_images(image, size=(self.image_size[0], self.image_size[1]))
     image = utils.convert2float(image)
-    image.set_shape([self.image_size, self.image_size, 3])
+    image.set_shape([self.image_size[0], self.image_size[1], 3])
     return image
 
 def test_reader():
